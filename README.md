@@ -31,7 +31,7 @@ Pedersen, 2023): the **Altman Z-score** (Altman, 1968) and the
 ├── README.md
 ├── .gitignore
 ├── ARM_Assignment.Rproj        # open this in RStudio (sets the working dir)
-├── code.R                      # the full analysis script
+├── ARM_ZScore_FScore.R                    # the full analysis script
 ├── data/                       # raw input data (read by the script)
 │   ├── [usa]_[z_score]_[monthly]_[vw_cap]_[factor].zip
 │   ├── [usa]_[f_score]_[monthly]_[vw_cap]_[factor].zip
@@ -63,7 +63,7 @@ Generated automatically by the script and **not tracked** by git:
 1. Clone the repo and open **`ARM_Assignment.Rproj`** in RStudio.
    This sets the working directory to the repo root, so the relative paths
    (`data/`, `plots/`) work automatically — no `setwd()` needed.
-2. Open `code.R` and run it (Source, or Ctrl+Shift+Enter).
+2. Open `ARM_ZScore_FScore.R` and run it (Source, or Ctrl+Shift+Enter).
 3. On the first run the script reads `data/`, downloads the FF factors, builds
    `groupXX_data.RData`, and produces all tables (console) and figures
    (`plots/`). Later runs load the `.RData` directly and skip the slow part.
