@@ -1,4 +1,4 @@
-# Global Factor Data Analysis — Altman Z-score & Piotroski F-score
+# Global Factor Data Analysis: Altman Z-score & Piotroski F-score
 
 **Course:** 5376 Asset/Risk Management I
 **Authors:** Mirko Balli, Lorenzo Attanasio
