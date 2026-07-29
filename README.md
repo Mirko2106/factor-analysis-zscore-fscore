@@ -1,101 +1,56 @@
-# Global Factor Data Analysis — Altman Z-score & Piotroski F-score
+# Financial Strength and the Distress Anomaly: Altman Z-Score vs Piotroski F-Score
 
-**Course:** 5376 Asset/Risk Management I
-**Authors:** Mirko Balli, Lorenzo Attanasio
+**Authors:** Mirko Balli, Lorenzo Attanasio  
+**Institution:** WU Vienna (Asset & Risk Management I)
 
-Factor performance analysis of two financial-quality factors from the
-[Global Factor Data](https://jkpfactors.com) repository (Jensen, Kelly &
-Pedersen, 2023): the **Altman Z-score** (Altman, 1968) and the
-**Piotroski F-score** (Piotroski, 2000).
+An empirical cross-sectional analysis of financial-quality factors using the [Global Factor Data](https://jkpfactors.com) universe (Jensen, Kelly & Pedersen, 2023). This project investigates the "distress anomaly" by contrasting two fundamental lenses of corporate health: the **Altman Z-score** (distance to default, representing the *level* of safety) and the **Piotroski F-score** (fundamental momentum, representing the *direction* of improvement).
 
----
+## Executive Summary & Investment Thesis
 
-## What the project does
+Contrary to the classical risk-reward tradeoff, the market does not systematically reward distress risk. Our analysis confirms the distress anomaly and highlights the superiority of fundamental improvement over static safety:
 
-1. **Descriptive stats** — risk/return, Newey-West t-stats, correlations.
-2. **Long vs short leg decomposition** — where the factor premium comes from.
-3. **Rolling-window analysis** — Sharpe, CAPM beta/alpha, rolling correlation,
-   regime overlay (HY OAS spread + NBER recessions).
-4. **Pre/post publication** — McLean & Pontiff (2016) decay framework.
-5. **Spanning regressions** — CAPM, Fama-French 3, Hou et al. (2021) q5,
-   plus FF5/FF6 as alternatives, with the GRS joint test.
-6. **Supplementary** — combined factor (50/50 + risk-parity), benchmark and
-   alternative-asset comparison.
+1. **The Distress Anomaly in Action:** The Z-Score premium is statistically indistinguishable from zero ($t = 0.21$). Going long safe firms and short distressed firms yields no excess return, as both legs perform identically over the long term. 
+2. **Direction Beats Level:** The F-Score delivers a robust, defensive premium ($t = 3.28$, clearing the Harvey-Liu-Zhu threshold of $t>3.0$). However, the two factors are negatively correlated ($\rho = -0.36$), indicating they capture opposing dimensions of "quality".
+3. **Alpha Decay & Spanning:** Post-publication (McLean & Pontiff, 2016 framework), the F-Score's efficacy decays significantly (t-stat drops from 4.48 to 1.18). Furthermore, spanning regressions and the Gibbons-Ross-Shanken (GRS) joint test reveal that the F-Score's premium is fully subsumed by the profitability (ROE) factor in the Hou et al. (2021) **q5 model**.
+4. **Regime Behavior:** Both factor premia are highly time-varying. Overlays with ICE BofA US High Yield OAS spreads and NBER recessions show long flat or negative stretches, emphasizing the need for regime-conditional risk management.
 
----
+## ⚙️ Methodology & Tech Stack
 
-## Repository structure
+This codebase is built for computational efficiency and statistical rigor, suitable for processing large cross-sectional datasets.
 
-```
-.
-├── README.md
-├── .gitignore
-├── ARM_Assignment.Rproj        # open this in RStudio (sets the working dir)
-├── code.R                      # the full analysis script
-├── data/                       # raw input data (read by the script)
-│   ├── [usa]_[z_score]_[monthly]_[vw_cap]_[factor].zip
-│   ├── [usa]_[f_score]_[monthly]_[vw_cap]_[factor].zip
-│   ├── [usa]_[z_score]_[monthly]_[vw_cap]_[portfolio].zip
-│   ├── [usa]_[f_score]_[monthly]_[vw_cap]_[portfolio].zip
-│   ├── [usa]_[mkt]_[monthly]_[vw]_[factor].zip
-│   ├── [usa]_[mkt]_[monthly]_[ew]_[factor].zip
-│   ├── [usa]_[quality]_[monthly]_[vw_cap]_[factor].zip
-│   ├── q5_factors_monthly_2024.csv
-│   ├── bloomberg_benchmarks.xlsx  # Bloomberg export (PRIVATE — git-ignored)
-│   ├── NFCI.csv
-│   ├── T10Y2Y.csv
-│   ├── USRECD.csv
-│   └── VIXCLS.csv
-├── docs/                       # guide / reference material
-└── slides/                     # final presentation (.pdf)
-```
+* **Data Processing:** Fully vectorized data wrangling and rolling-window aggregations utilizing R's `data.table` and `zoo`.
+* **Robust Econometrics:** Performance metrics and spanning regressions are evaluated using Newey-West HAC (Heteroskedasticity and Autocorrelation Consistent) standard errors to correct for overlapping observations and serial correlation.
+* **Avoidance of Look-Ahead Bias:** In the supplementary Risk-Parity portfolio construction, rolling volatility weights are explicitly lagged by one month (`t-1`) to ensure strictly out-of-sample capital allocation.
 
-Generated automatically by the script and **not tracked** by git:
-`25_data.RData` (the merged dataset) and the `plots/` folder.
+##  Repository Structure
 
----
+    .
+    ├── README.md
+    ├── 25_code.R                   # Core research script (data ingestion, regressions, visualization)
+    ├── 25_data.RData               # Pre-processed and merged dataset (generated dynamically)
+    ├── data/                       # Raw input data directory (see Data Governance note below)
+    ├── docs/                       # Assignment instructions and oral defense materials
+    ├── plots/                      # Output directory for rolling metrics, cumulative returns, and regime overlays
+    └── slides/                     # Executive presentation deck (.pdf and .pptx)
 
-## How to run
+## Data Governance & Compliance Policy
 
-**Prerequisites:** R (>= 4.0) and an internet connection on the first run
-(the script downloads Fama-French factors from the Ken French Data Library).
+To strictly comply with vendor data redistribution policies (specifically Bloomberg L.P. Terms of Service), the raw benchmark dataset (`bloomberg_benchmarks.xlsx`) containing proprietary Total Return and OAS spread indices has been omitted from this public repository. 
 
-1. Clone the repo and open **`ARM_Assignment.Rproj`** in RStudio.
-   This sets the working directory to the repo root, so the relative paths
-   (`data/`, `plots/`) work automatically — no `setwd()` needed.
-2. Open `code.R` and run it (Source, or Ctrl+Shift+Enter).
-3. On the first run the script reads `data/`, downloads the FF factors, builds
-   `25_data.RData`, and produces all tables (console) and figures
-   (`plots/`). Later runs load the `.RData` directly and skip the slow part.
+The `data/` folder contains only publicly available factor data from:
+* **Global Factor Data:** JKP Factor and Portfolio returns (jkpfactors.com)
+* **global-q.org:** Hou et al. (2021) q5 factors
+* **Ken French Data Library:** FF3, FF5, and Momentum factors (downloaded dynamically via API in the script)
+* **FRED:** Macro regime indicators (NFCI, USRECD, VIX, Term Spread)
 
-The required CRAN packages auto-install if missing:
-`data.table, zoo, ggplot2, sandwich, lmtest, readxl, scales`.
+*Note: Running `25_code.R` without the Bloomberg file will bypass the benchmark comparison section (Table 5 & 6, Fig 7) unless a dummy dataset of identical structure is provided.*
 
----
+## How to Run (Reproducibility)
 
-## Data sources
+**Prerequisites:** R ($\ge$ 4.0) and an active internet connection (for dynamic Ken French data fetching). Missing CRAN packages (`data.table`, `zoo`, `ggplot2`, `sandwich`, `lmtest`, `readxl`, `scales`) will auto-install on the first run.
 
-| Data | Source |
-|------|--------|
-| Factor & portfolio returns | jkpfactors.com (Global Factor Data) |
-| q5 factors (Hou et al. 2021) | global-q.org |
-| FF3 / FF5 / Momentum | Ken French Data Library (downloaded in-script) |
-| Equity / bond / commodity / HY OAS | Bloomberg terminal |
-| Macro regime variables | FRED (St. Louis Fed) |
-
----
-
-## Key findings (short)
-
-- **Z-score has no premium** (t ≈ 0.2): safe and distressed firms performed
-  alike — the distress anomaly.
-- **F-score works** (t ≈ 3.3) but its premium is fully explained by the q5
-  ROE/profitability factor (alpha vanishes under q5; GRS not rejected only for q5).
-- The two factors are **negatively correlated** (level vs direction of quality).
-
----
-
-## Note
-
-This repository is **private**. The Bloomberg data in `data/bloomberg_benchmarks.xlsx`
-is licensed and must not be redistributed publicly.
+1. Clone the repository and set your R working directory to the repository root.
+2. Execute `25_code.R`.
+3. The script features an intelligent caching mechanism:
+   * **First Run:** It ingests raw CSVs/ZIPs from `data/`, downloads external FF data, executes the full econometric pipeline, outputs charts to `plots/`, and caches the master dataset as `25_data.RData`.
+   * **Subsequent Runs:** It detects `25_data.RData`, bypassing the raw data processing phase and jumping directly to the analysis and visualization generation.
