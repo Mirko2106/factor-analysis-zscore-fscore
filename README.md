@@ -29,7 +29,7 @@ This codebase is built for computational efficiency and statistical rigor, suita
     ├── 25_code.R                   # Core research script (data ingestion, regressions, visualization)
     ├── 25_data.RData               # Pre-processed and merged dataset (generated dynamically)
     ├── data/                       # Raw input data directory (see Data Governance note below)
-    ├── docs/                       # Assignment instructions and oral defense materials
+    ├── docs/                       # Assignment instructions 
     ├── plots/                      # Output directory for rolling metrics, cumulative returns, and regime overlays
     └── slides/                     # Executive presentation deck (.pdf and .pptx)
 
