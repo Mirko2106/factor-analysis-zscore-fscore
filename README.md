@@ -14,7 +14,7 @@ Contrary to the classical risk-reward tradeoff, the market does not systematical
 3. **Alpha Decay & Spanning:** Post-publication (McLean & Pontiff, 2016 framework), the F-Score's efficacy decays significantly (t-stat drops from 4.48 to 1.18). Furthermore, spanning regressions and the Gibbons-Ross-Shanken (GRS) joint test reveal that the F-Score's premium is fully subsumed by the profitability (ROE) factor in the Hou et al. (2021) **q5 model**.
 4. **Regime Behavior:** Both factor premia are highly time-varying. Overlays with ICE BofA US High Yield OAS spreads and NBER recessions show long flat or negative stretches, emphasizing the need for regime-conditional risk management.
 
-## ⚙️ Methodology & Tech Stack
+## Methodology & Tech Stack
 
 This codebase is built for computational efficiency and statistical rigor, suitable for processing large cross-sectional datasets.
 
